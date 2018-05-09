@@ -1,0 +1,46 @@
+StageStyle {
+    -fx-background-color: red;
+}
+
+AnchorPane {
+    -fx-background-color: linear-gradient(#ffa751, #eea849);
+}
+
+.text-field {
+    -fx-background-color: Transparent;
+    -fx-text-fill: #feff6d;
+    -fx-prompt-text-fill: #c5c5c5;
+    -fx-border-width: 0 0 2 0;
+    -fx-border-color: black;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+.text-field:focused {
+    -fx-background-color: Transparent;
+}
+
+.button{
+    -fx-background-color: #ee4a0e;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-background-radius: 14px;
+}
+
+.button:hover {
+    -fx-background-color: #ff8c1a;
+}
+
+.combo-box {
+    -fx-background-color: #ee4a0e;
+    -fx-text-fill: white;
+}
+
+.combo-box .cell {
+    -fx-background-color: #ee4a0e;
+    -fx-text-fill: white;
+}
+
+.combo-box .cell:hover {
+    -fx-background-color: #ff6e04;
+}
