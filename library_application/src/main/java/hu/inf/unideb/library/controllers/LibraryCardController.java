@@ -85,7 +85,7 @@ public class LibraryCardController {
     private void buyOrRenewLibraryCard() {
         try {
             if(button.getText().equals("Bérlet váltás")) {
-                if(borrowerName.getText() == null || borrowerHomeAddress.getText() == null ||
+                if(borrowerName.getText().isEmpty() || borrowerHomeAddress.getText().isEmpty() ||
                         periodOfLibraryCard.getSelectionModel().isEmpty()) {
                     throw new NullPointerException();
                 }
@@ -99,11 +99,19 @@ public class LibraryCardController {
                     throw new NullPointerException();
                 }
             }
-            int amount = calculateTheAmountToBePaid(
-                    new BorrowerDAO().getBorrowerByLibraryCardId(libraryCardId.getSelectionModel().getSelectedItem()),
-                    periodOfLibraryCard.getSelectionModel().getSelectedItem().toString(),
-                    discount.getSelectionModel().getSelectedItem().toString(),
-                    button.getText());
+            int amount = 0;
+            if(!libraryCardId.getSelectionModel().isEmpty()) {
+                 amount = calculateTheAmountToBePaid(
+                        new BorrowerDAO().getBorrowerByLibraryCardId(libraryCardId.getSelectionModel().getSelectedItem()),
+                        periodOfLibraryCard.getSelectionModel().getSelectedItem().toString(),
+                        discount.getSelectionModel().getSelectedItem().toString(),
+                        button.getText());
+            }
+            else {
+                amount = calculateTheAmountToBePaid(
+                        periodOfLibraryCard.getSelectionModel().getSelectedItem().toString(),
+                        discount.getSelectionModel().getSelectedItem().toString());
+            }
             ButtonType payButton = new ButtonType("Fizetés");
             ButtonType cancelButton = new ButtonType("Mégse");
             Optional<ButtonType> result = payAlert(amount,payButton,cancelButton).showAndWait();
@@ -182,6 +190,21 @@ public class LibraryCardController {
         }
         return expirationDateOfLibraryCard.isAfter(LocalDate.now()) ?
                 expirationDateOfLibraryCard.plusMonths(plusMonths) : LocalDate.now().plusMonths(plusMonths);
+    }
+
+    public int calculateTheAmountToBePaid(String period, String discount) {
+        double amount = 0, discountPercentage = 0;
+        switch (period) {
+            case "1 hónap": amount = 5000; break;
+            case "6 hónap": amount = 25000; break;
+            case "12 hónap": amount = 45000; break;
+        }
+        switch (discount) {
+            case "Diák": discountPercentage = 0.5; break;
+            case "Nyugdíjas": discountPercentage = 0.3; break;
+        }
+
+        return (int) (amount - (amount * discountPercentage));
     }
 
     public int calculateTheAmountToBePaid(Borrower borrower, String period, String discount, String payType) {
